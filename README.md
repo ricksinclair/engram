@@ -131,6 +131,26 @@ edit them, and run the ingestion scripts. See
 | `npm run index` / `doc-index` | Deterministic "what changed?" probes (Notion / local files). |
 | `npm run export` / `import` | Versioned JSON backups in git. Embeddings are excluded (they're large and regenerable) — re-run `embed` after a restore. |
 
+## Notion setup: one root, authorize once
+
+The Notion side follows a single rule: **one neutral root page is the home for _all_ your
+projects**, and you authorize the integration on it exactly once.
+
+1. Make one page in Notion — call it "Projects" or "Workspace" (not any single project's page).
+2. Share it with your integration once (page ••• → **Connections**), and set
+   `NOTION_PARENT_PAGE_ID` to its id.
+3. Run `new-project` (or `setup-notion`) per project. Each project's workspace, its five
+   databases, and a `Capture` page all nest **under** that root and **inherit access
+   automatically** — you never share another page, however many projects you add.
+
+Notes you want ingested go under the root (every project gets a `Capture` page for exactly
+this), so the capture lane reads them with no extra setup. It mirrors the graph, which
+already holds every project in one place.
+
+> **Trade-off:** one root + one token = one authorization, but a leaked token reaches
+> everything under the root. For sensitive or client projects, give them a *separate* root
+> and token.
+
 ## Layout
 
 ```

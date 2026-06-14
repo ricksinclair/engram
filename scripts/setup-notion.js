@@ -118,10 +118,11 @@ export async function createWorkspace({ name, goal, modules, dryRun = false, log
     else { const db = await notion('databases', body); emit(def.key, 'data_source', db.id, def.purpose); log(`✓ database: ${def.key}`); }
   }
 
-  // 3. Status pages.
+  // 3. Status + capture pages.
   const pages = {
     'Implementation Progress': [para(goal), h2(today), para('Workspace created.')],
     Architecture: [h2('Overview'), h2('Components'), h2('Data Model'), h2('Decisions')],
+    Capture: [para('Drop notes, research, and decisions under this page. Anything nested here is reachable by your integration and can be ingested into the graph (the capture lane) — no extra page-sharing needed, because it inherits this workspace\'s access.')],
   };
   for (const [label, children] of Object.entries(pages)) {
     const body = { parent: { type: 'page_id', page_id: workspaceId }, properties: { title: { title: [{ text: { content: label } }] } }, children };

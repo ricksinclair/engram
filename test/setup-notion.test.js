@@ -35,15 +35,17 @@ test('manifestBlock nests entries under the project name', () => {
   assert.equal(block.projects.Acme.entries['Development Tracker'].kind, 'data_source');
 });
 
-test('createWorkspace dry-run builds workspace + 5 dbs + 2 pages, creates nothing', async () => {
+test('createWorkspace dry-run builds workspace + 5 dbs + 3 pages, creates nothing', async () => {
   const { entries, dryPayloads, workspaceUrl } = await createWorkspace({ name: 'Demo', goal: 'g', modules: ['A', 'B'], dryRun: true });
-  assert.equal(dryPayloads.length, 8, '1 workspace page + 5 databases + 2 status pages');
-  assert.equal(Object.keys(entries).length, 8);
+  assert.equal(dryPayloads.length, 9, '1 workspace page + 5 databases + 3 pages (Implementation Progress, Architecture, Capture)');
+  assert.equal(Object.keys(entries).length, 9);
   assert.equal(workspaceUrl, '', 'dry-run creates nothing, so no real url');
   const labels = dryPayloads.map((p) => p.label);
   assert.ok(labels[0].startsWith('page: Demo'), 'workspace page is created first');
   assert.ok(labels.includes('database: Development Tracker'));
   assert.ok(labels.includes('page: Implementation Progress'));
+  assert.ok(labels.includes('page: Capture'), 'capture page for ingestible notes');
   assert.equal(entries['Development Tracker'].kind, 'data_source');
   assert.equal(entries['Architecture'].kind, 'page');
+  assert.equal(entries['Capture'].kind, 'page');
 });
