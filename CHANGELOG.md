@@ -25,6 +25,10 @@ page that's stale *because* it was left alone — this catches that.)
   functions: Notion payload builders, RRF search fusion, the CLAUDE.md template +
   manifest merge, the `source_kind` vocabulary, Notion-ID validation, and CLI dispatch.
   Externals are mocked via `--dry-run`; runs in CI on every push. (#2)
+- **One-root Notion model** — documented as the happy path (README + site): one neutral
+  root page hosts *every* project, authorized once; each project nests under it and inherits
+  access. `setup-notion`/`new-project` now also create a `Capture` page under each workspace
+  as a home for ingestible notes. (#3)
 
 ## [1.3.0] — Set up a whole project in one command (graph *and* Notion)
 
