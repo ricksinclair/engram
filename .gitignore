@@ -3,3 +3,6 @@ node_modules/
 logs/
 # Never commit real graph exports — they contain your private knowledge.
 backups/*.json
+
+# Your real Notion IDs (config, not template — see examples/notion-ids.example.json)
+notion-ids.json

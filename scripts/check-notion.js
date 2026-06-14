@@ -53,15 +53,19 @@ function flatten(manifest) {
 }
 
 async function resolveLive(token, id) {
-  // Try as a page first, then as a database (data sources live under a database id).
-  for (const kind of ['pages', 'databases']) {
+  // An id is either a page or a database; the wrong-type endpoint returns 400/404,
+  // so try BOTH and only fail when neither resolves. Auth/permission errors (401/403)
+  // are fatal and reported as-is.
+  let last = 404;
+  for (const kind of ['databases', 'pages']) {
     const res = await fetch(`https://api.notion.com/v1/${kind}/${id.replace(/-/g, '')}`, {
       headers: { Authorization: `Bearer ${token}`, 'Notion-Version': '2022-06-28' },
     });
     if (res.ok) return { ok: true, as: kind };
-    if (res.status !== 404) return { ok: false, status: res.status };
+    last = res.status;
+    if (res.status === 401 || res.status === 403) return { ok: false, status: res.status };
   }
-  return { ok: false, status: 404 };
+  return { ok: false, status: last };
 }
 
 async function main() {
