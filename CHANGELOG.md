@@ -43,6 +43,11 @@ page that's stale *because* it was left alone — this catches that.)
   glossary (knowledge graph, capture lane, operations workspace, the one root), numbered steps per
   track, and an honest note about the one-time Neo4j install. README gains a "Start here" on-ramp;
   the site hero + CTA now lead with **Get started →**. (#5)
+- **Graph-first recall in the generated `CLAUDE.md`** — `new-project`'s repo template now tells the
+  agent the graph is the **primary source of truth for recall**: query it *first* (`resume` /
+  `context` / `search`) for any question about work done or decisions made, with **Notion as the
+  secondary lane** reached via the `Source` references the graph surfaces — instead of answering
+  from memory or searching blind. Makes the agent consult the graph unprompted, not only when asked.
 
 ## [1.3.0] — Set up a whole project in one command (graph *and* Notion)
 
