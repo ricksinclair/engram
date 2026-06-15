@@ -281,6 +281,15 @@
       </article>
 
       <article class="skill">
+        <h3>Surface undocumented decisions</h3>
+        <p>Decisions the agent makes can live only in the graph, where a person never sees them. A
+        review pass flags any decision with no human-readable page refreshed since — so the
+        <em>why</em> reaches Notion and your docs, not just a query.</p>
+        <p class="ask"><span>Ask:</span> “Which decisions aren't written up yet?”</p>
+        <p class="cli"><code>engram review:decisions</code></p>
+      </article>
+
+      <article class="skill">
         <h3>Assemble context to paste</h3>
         <p>Pull a clean, scoped context block — by project, domain, or tag — ready to drop into
         any chat, so the assistant reasons over your real knowledge, not a vague summary.</p>
@@ -302,7 +311,7 @@
 <section class="band band-alt" id="why">
   <div class="wrap">
     <p class="section-tag">06 — what makes it different</p>
-    <h2>Six ideas doing the work.</h2>
+    <h2>Eight ideas doing the work.</h2>
     <ol class="diff-list">
       <li>
         <span class="n">i</span>
@@ -348,6 +357,15 @@
         applied to memory, not just integrity. The honest cost: ~40 tokens of context per turn
         (the full rule is paid once per session). Review, tune, or switch it off via
         <code>/hooks</code>.</p></div>
+      </li>
+      <li>
+        <span class="n">viii</span>
+        <div><h3>Decisions reach humans, not just the graph</h3>
+        <p>A captured decision is a graph fact a person can’t casually read — so the human-readable
+        docs can rot <em>behind</em> a rich graph (the inverse of the problem this set out to solve).
+        <code>review:decisions</code> flags any decision with no Notion page, README, or site refreshed
+        since — so it gets written up. The same enforcement as recall, pointed the other way: capture
+        isn’t done until it’s in <em>both</em> the graph and a place a human reads.</p></div>
       </li>
     </ol>
   </div>
