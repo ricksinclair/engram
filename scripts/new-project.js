@@ -64,10 +64,14 @@ export function claudeMd(name, workspaceUrl, e) {
 - Log every change to CHANGELOG.md and the Changelog DB.
 - Log test runs to Test Run Metrics; track flaky/failing in Problem Tests.
 
-## Knowledge graph (Engram)
-This project is a \`Project\` node in your Engram graph. Consult it before substantive work
-(\`npm run context -- --project ${JSON.stringify(name)}\`, \`npm run search\`); capture decisions
-as Insights; MERGE never CREATE; invalidate-don't-delete; run \`npm run lint:graph\` after writes.
+## Knowledge graph (Engram) — primary source of truth for recall
+This project is a \`Project\` node in your Engram graph. **Query the graph FIRST** for any question
+about work done, decisions made, or *why* something is the way it is — before answering from memory
+or searching elsewhere (\`npm run resume\`, \`npm run context -- --project ${JSON.stringify(name)}\`,
+\`npm run search\`). Treat **Notion as the secondary lane**: follow the \`Source\` references the graph
+surfaces rather than searching it blind. Capture decisions as Insights; MERGE never CREATE;
+invalidate-don't-delete; run \`npm run lint:graph\` after writes; sync the graph at the end of each
+completed unit of work.
 
 ## Git
 Branch from main; conventional commits; PR before merge.
