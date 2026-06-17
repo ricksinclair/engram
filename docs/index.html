@@ -196,6 +196,37 @@
   </div>
 </section>
 
+<!-- ───────────────────────── THE OBSERVATORY (Studio) ───────────────────────── -->
+<section class="band band-studio" id="studio">
+  <div class="wrap">
+    <p class="section-tag">the observatory</p>
+    <h2>A graph you can actually <em>see</em>.</h2>
+    <p class="prose">
+      That schema isn't a diagram — it's alive. The <strong>Studio</strong> renders your whole
+      graph as a constellation you explore on your own machine. Click any node and the inspector
+      <em>composes itself</em> from what that node is: a goal shows its progress, a rule its
+      confidence, a source its file. Focus to fade the noise, ask in plain language, and follow a
+      fact to the moment it was superseded.
+    </p>
+
+    <figure class="studio-demo">
+      <video autoplay loop muted playsinline poster="media/still-overview.png"
+             aria-label="Scatterbrained Studio: exploring a constellation of nodes, the inspector composing itself from the selected node, and searching by meaning.">
+        <source src="media/studio-demo.webm" type="video/webm" />
+        <img src="media/studio-demo.gif" alt="Scatterbrained Studio demo — a force-directed constellation; clicking a node opens a composed inspector with provenance, relations and timeline." />
+      </video>
+      <figcaption>The Studio on a demo graph — running entirely locally, your data never leaves your machine.</figcaption>
+    </figure>
+
+    <div class="studio-feats">
+      <div><b>Constellation</b> the whole graph as a force-directed map, with degree-of-interest focus that fades the unrelated.</div>
+      <div><b>Composable inspector</b> the panel is built <em>from the node</em> — provenance, relations, bi-temporal timeline, goal progress.</div>
+      <div><b>Ask in plain language</b> “what's due to revisit” · “needs review” · search by meaning, not just keywords.</div>
+      <div><b>Local &amp; private</b> it reads your local graph; pluggable local LLM, nothing phoned home.</div>
+    </div>
+  </div>
+</section>
+
 <!-- ───────────────────────── THE HUMAN SURFACE ───────────────────────── -->
 <section class="band band-alt">
   <div class="wrap">
