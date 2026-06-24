@@ -25,6 +25,14 @@ const FORBIDDEN = new Set([
 ]);
 // The retired brand — the rebrand must be complete in anything public.
 const REBRAND_RE = /engram/i;
+// Project-specific overfit — terms tied to the maintainer's OTHER projects/domains that
+// crept in because the public repo was authored from a private source. The denylist must
+// NEVER be hardcoded here (that would publish the very private names it guards — same lesson
+// as the CI leak gate): it comes from the FORBIDDEN_TERMS env (a pipe-separated regex, held
+// in an encrypted Actions secret / your local env). Unset → the scan skips cleanly (forks,
+// fresh clones). And we report only a COUNT — never the matched line or filename, either of
+// which could itself contain a private term.
+const DOMAIN_RE = process.env.FORBIDDEN_TERMS ? new RegExp(process.env.FORBIDDEN_TERMS, 'i') : null;
 // Files whose JOB is to contain the retired token — the rebrand alias map and this
 // gate itself. They legitimately mention "engram"; don't flag them as leftovers.
 const REBRAND_SKIP = new Set(['aliases.js', 'release-sanity.js']);
@@ -37,6 +45,7 @@ const targets = (roots.length ? roots : DEFAULT_ROOTS).map((r) => path.resolve(r
 
 const errors = [];
 const warns = [];
+const domainHitFiles = new Set();   // distinct files matching FORBIDDEN_TERMS — COUNT only, names never reported
 
 function walk(dir) {
   let entries;
@@ -49,6 +58,7 @@ function walk(dir) {
     if (REBRAND_SKIP.has(e.name)) continue;
     let text;
     try { text = fs.readFileSync(full, 'utf8'); } catch { continue; }
+    if (DOMAIN_RE && DOMAIN_RE.test(text)) domainHitFiles.add(full);   // file-level test; never store the line
     text.split(/\r?\n/).forEach((line, i) => {
       if (REBRAND_RE.test(line)) warns.push(`${full}:${i + 1}  ${line.trim().slice(0, 100)}`);
     });
@@ -75,5 +85,15 @@ if (warns.length) {
   console.log('✅ no "engram" rebrand leftovers');
 }
 
-console.log(`\n${errors.length ? '❌ FAIL' : '✅ PASS'} — ${errors.length} errors, ${warns.length} warnings.\n`);
+if (!DOMAIN_RE) {
+  console.log('ℹ️  project-specific term scan skipped (FORBIDDEN_TERMS not set — fork or unconfigured)');
+} else if (domainHitFiles.size) {
+  // COUNT only — never the file path or matched line; either could leak a private term.
+  console.log(`\n⚠️  ${domainHitFiles.size} file(s) contain a forbidden project-specific term — scrub before publishing (terms/paths not shown by design)`);
+} else {
+  console.log('✅ no project-specific overfit terms');
+}
+
+const totalWarns = warns.length + domainHitFiles.size;
+console.log(`\n${errors.length ? '❌ FAIL' : '✅ PASS'} — ${errors.length} errors, ${totalWarns} warnings.\n`);
 process.exit(errors.length ? 1 : 0);
