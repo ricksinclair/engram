@@ -3,17 +3,17 @@
 // Uses MERGE on the node's natural key, so re-running updates in place.
 //
 // Usage:
-//   node scripts/add-node.js person --name "Jane Doe" --role "cooperative attorney" \
-//     --organization "Smith & Associates" --jurisdiction "NC" \
-//     --contact "jane@smithlaw.com" --relationship "SME" --tags "legal,acme,nc"
+//   node scripts/add-node.js person --name "Jane Doe" --role "engineering lead" \
+//     --organization "Acme Corp" --jurisdiction "US" \
+//     --contact "jane@example.com" --relationship "SME" --tags "team,acme"
 //
-//   node scripts/add-node.js idea --name "Patronage tracking module" \
-//     --description "Track quarterly revenue by region" \
-//     --status "open_question" --domain "software" --tags "acme,governance"
+//   node scripts/add-node.js idea --name "Offline sync module" \
+//     --description "Queue writes locally and reconcile on reconnect" \
+//     --status "open_question" --domain "software" --tags "acme,sync"
 //
-//   node scripts/add-node.js resource --name "Worker Cooperative Toolbox" --type "book" \
-//     --url "https://example.com" --summary "Guide to worker co-op formation" \
-//     --tags "cooperative,legal"
+//   node scripts/add-node.js resource --name "Designing Data-Intensive Applications" --type "book" \
+//     --url "https://example.com" --summary "Guide to building reliable systems" \
+//     --tags "engineering,reference"
 //
 // Two cross-cutting flags on any type:
 //   --aliases "a,b"  alternate names this entity is known by (searchable; helps

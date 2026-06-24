@@ -21,10 +21,10 @@ describe('protected-facts — kind vocab', () => {
 describe('protected-facts — normalizeValue', () => {
   it('is case-, space-, and comma-insensitive on the digits that matter', () => {
     expect(normalizeValue('$4,200')).toBe(normalizeValue('$4200'));
-    expect(normalizeValue('  Subchapter   S ')).toBe('subchapter s');
+    expect(normalizeValue('  Section   12 ')).toBe('section 12');
   });
   it('tightens § spacing and unifies U.S.C. forms', () => {
-    expect(normalizeValue('26 U.S.C. § 1388')).toBe(normalizeValue('26 USC §1388'));
+    expect(normalizeValue('17 U.S.C. § 107')).toBe(normalizeValue('17 USC §107'));
   });
   it('handles null/empty', () => {
     expect(normalizeValue(null)).toBe('');
@@ -34,18 +34,18 @@ describe('protected-facts — normalizeValue', () => {
 
 describe('protected-facts — detectCandidates', () => {
   it('finds money, percent, dates, and statutory citations', () => {
-    const c = detectCandidates('We paid $4,200 (a 12% cut) on 2026-06-17 per 26 U.S.C. §1388 and Subchapter S.');
+    const c = detectCandidates('We paid $4,200 (a 12% cut) on 2026-06-17 per 17 U.S.C. §107.');
     const kinds = c.map((x) => x.kind);
     expect(kinds).toContain('money');
     expect(kinds).toContain('percent');
     expect(kinds).toContain('date');
     expect(kinds).toContain('citation');
-    expect(c.map((x) => x.value)).toContain('Subchapter S');
+    expect(c.map((x) => x.value)).toContain('17 U.S.C. §107');
   });
   it('detects form numbers as citations', () => {
-    const c = detectCandidates('File a 1099-PATR and an 1120-C.');
+    const c = detectCandidates('File a 1099-MISC and an 1040-X.');
     expect(c.filter((x) => x.kind === 'citation').map((x) => x.value)).toEqual(
-      expect.arrayContaining(['1099-PATR', '1120-C']),
+      expect.arrayContaining(['1099-MISC', '1040-X']),
     );
   });
   it('does not also flag a money amount as a bare number (priority/no-overlap)', () => {
@@ -54,8 +54,8 @@ describe('protected-facts — detectCandidates', () => {
     expect(c[0].kind).toBe('money');
   });
   it('trims trailing sentence punctuation from a match', () => {
-    const c = detectCandidates('per 26 U.S.C. §1388.');
-    expect(c.find((x) => x.kind === 'citation').value).toBe('26 U.S.C. §1388');
+    const c = detectCandidates('per 17 U.S.C. §107.');
+    expect(c.find((x) => x.kind === 'citation').value).toBe('17 U.S.C. §107');
   });
   it('returns matches in document order', () => {
     const c = detectCandidates('first 50% then $9.99');
@@ -70,29 +70,29 @@ describe('protected-facts — detectCandidates', () => {
 
 describe('protected-facts — checkRewrite (the guard)', () => {
   const facts = [
-    { id: 'a', value: '26 U.S.C. §1388', kind: 'citation' },
+    { id: 'a', value: '17 U.S.C. §107', kind: 'citation' },
     { id: 'b', value: '$4,200', kind: 'money' },
   ];
   it('passes when every fact still appears (space/comma-tolerant)', () => {
-    const r = checkRewrite(facts, 'Per 26 USC § 1388 the patronage dividend was $4200.');
+    const r = checkRewrite(facts, 'Per 17 USC § 107 the filing fee was $4200.');
     expect(r.ok).toBe(true);
     expect(r.violations).toEqual([]);
   });
   it('flags a dropped fact with no replacement', () => {
-    const r = checkRewrite(facts, 'Per 26 U.S.C. §1388, dividends were distributed.');
+    const r = checkRewrite(facts, 'Per 17 U.S.C. §107, dividends were distributed.');
     expect(r.ok).toBe(false);
     expect(r.violations).toHaveLength(1);
     expect(r.violations[0]).toMatchObject({ id: 'b', status: 'dropped', suggestedNew: null });
   });
   it('flags an altered fact and suggests the lone same-kind replacement', () => {
-    const r = checkRewrite(facts, 'Per 26 U.S.C. §1388 the dividend was $4,300.');
+    const r = checkRewrite(facts, 'Per 17 U.S.C. §107 the dividend was $4,300.');
     expect(r.ok).toBe(false);
     const v = r.violations.find((x) => x.id === 'b');
     expect(v.status).toBe('altered');
     expect(v.suggestedNew).toBe('$4,300');
   });
   it('stays dropped (not altered) when the new text has multiple same-kind candidates', () => {
-    const r = checkRewrite(facts, 'Per 26 U.S.C. §1388 we split $4,300 and $1,000.');
+    const r = checkRewrite(facts, 'Per 17 U.S.C. §107 we split $4,300 and $1,000.');
     const v = r.violations.find((x) => x.id === 'b');
     expect(v.status).toBe('dropped');
     expect(v.suggestedNew).toBe(null);

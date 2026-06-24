@@ -164,11 +164,11 @@ describe('composeInspector — resolver order → registered renderers', () => {
   it('renders protected-facts: value, editable note, pending approve/reject, add affordance', () => {
     const ctx = { esc: (s) => String(s), trunc: (s) => String(s) };
     const data = { id: 'e1', protectedFacts: [
-      { id: 'k1', value: '26 U.S.C. §1388', note: 'the controlling IRS section' },
+      { id: 'k1', value: '17 U.S.C. §107', note: 'the controlling section' },
       { id: 'k2', value: '$4,200', pending_status: 'altered', pending_new: '$4,500' },
     ] };
     const html = REGISTRY['protected-facts'].render({ id: 'e1' }, data, ctx);
-    expect(html).toContain('26 U.S.C. §1388');
+    expect(html).toContain('17 U.S.C. §107');
     expect(html).toContain('$4,200');
     // value is shown plainly — NO kind badge/picker, NO tags
     expect(html).not.toContain('pf-kind');
@@ -176,7 +176,7 @@ describe('composeInspector — resolver order → registered renderers', () => {
     expect(html).not.toContain('__setFactKind');
     // the editable note (pre-filled, saves on change)
     expect(html).toContain('pf-note-input');
-    expect(html).toContain('the controlling IRS section');
+    expect(html).toContain('the controlling section');
     expect(html).toContain('__setFactNote(this)');
     // approval banner
     expect(html).toContain("__resolveFact('k2','approve')");
@@ -190,7 +190,7 @@ describe('composeInspector — resolver order → registered renderers', () => {
   it('protected-facts shows a retired list with restore when facts were unpinned', () => {
     const ctx = { esc: (s) => String(s), trunc: (s) => String(s) };
     const data = { id: 'e1', protectedFacts: [{ id: 'k1', value: '$4,200' }],
-      retiredFacts: [{ id: 'r1', value: '26 U.S.C. §1388', note: 'old citation', retired_at: '2026-06-19' }] };
+      retiredFacts: [{ id: 'r1', value: '17 U.S.C. §107', note: 'old citation', retired_at: '2026-06-19' }] };
     const html = REGISTRY['protected-facts'].render({ id: 'e1' }, data, ctx);
     expect(html).toContain('retired · 1');
     expect(html).toContain('pf-retired-val');
@@ -368,10 +368,10 @@ describe('chart component', () => {
 
 describe('confidence component', () => {
   it('maps level to meter fill + tone, shows citation', () => {
-    const html = REGISTRY.confidence.render({ confidence: 'high', citation: 'NCGS Ch. 54' }, {}, { esc, trunc: (s) => s });
+    const html = REGISTRY.confidence.render({ confidence: 'high', citation: '17 U.S.C. §107' }, {}, { esc, trunc: (s) => s });
     expect(html).toContain('width:100%');
     expect(html).toContain('conf-ok');
-    expect(html).toContain('NCGS Ch. 54');
+    expect(html).toContain('17 U.S.C. §107');
   });
   it('renders medium at 66% with mid tone', () => {
     expect(REGISTRY.confidence.render({ confidence: 'medium' }, {}, { esc, trunc: (s) => s })).toContain('width:66%');

@@ -428,7 +428,7 @@ export const REGISTRY = {
         `<button class="pf-suggest-btn" onclick="__suggestFacts(this);return false" title="scan the text for pinnable facts">suggest from text</button>` +
         `<div class="pf-suggestions"></div>` +
         `<form class="pf-form" onsubmit="__pinFact(this);return false">` +
-        `<input name="value" type="text" placeholder="pin a fact — e.g. 26 U.S.C. §1388" aria-label="protected fact value" autocomplete="off" />` +
+        `<input name="value" type="text" placeholder="pin a fact — e.g. 17 U.S.C. §107" aria-label="protected fact value" autocomplete="off" />` +
         `<input name="note" type="text" placeholder="details (optional)" aria-label="details" autocomplete="off" />` +
         `<button type="submit" class="pf-pin-btn">pin</button></form></div>`;
       // Retired (unpinned) facts — soft-removed, recoverable. Shown muted with a restore button.
